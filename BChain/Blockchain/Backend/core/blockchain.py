@@ -30,16 +30,6 @@ class Blockchain:
         self.chain.append(Block(BlockHeight, 1, blockheader.__dict__, 1, Transaction).__dict__)
         print(json.dumps(self.chain, indent= 4))
 
-    def main(self):
-        i = 0
-        while i < 3:
-            lastBlock = self.chain[::-1]
-            BlockHeight = lastBlock[0]["Height"] + 1
-            prevBlockHash = lastBlock[0]['BlockHeader']['blockHash']
-            self.addBlock(BlockHeight, prevBlockHash)
-            i += 1
-
-
-if __name__ == "__main__":
+   if __name__ == "__main__":
     blockchain = Blockchain()
-    blockchain.main()
+   
