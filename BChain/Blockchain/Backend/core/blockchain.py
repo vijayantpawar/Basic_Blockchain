@@ -1,5 +1,8 @@
 import sys
-sys.path.append('/python_basics/BChain')
+import os
+
+project_path = '/Users/shrianshagarwal/Documents/projects/Basic_Blockchain'
+sys.path.append(os.path.join(project_path, 'BChain'))
 
 from Blockchain.Backend.core.block import Block
 from Blockchain.Backend.core.blockheader import BlockHeader
@@ -25,11 +28,24 @@ class Blockchain:
         Transaction = f"Codies Alert sent {BlockHeight} Bitcoins to jeo"
         merkleRoot = hash256(Transaction.encode()).hex()
         bits = 'ffff001f'
-        blockheader = BlockHeader(VERSION, prevBlockHash, merkleRoot, timestamp, bits) 
+        blockheader = BlockHeader(VERSION, prevBlockHash, merkleRoot, timestamp, bits)
         blockheader.mine()
-        self.chain.append(Block(BlockHeight, 1, blockheader.__dict__, 1, Transaction).__dict__)
-        print(json.dumps(self.chain, indent= 4))
+        block = Block(BlockHeight, 1, blockheader.__dict__, 1, Transaction)
+        self.chain.append(block.__dict__)
+        print(json.dumps([block.__dict__], indent=4))
 
-   if __name__ == "__main__":
+    def main(self, num_blocks):
+        i = 0
+        while i < num_blocks:
+            lastBlock = self.chain[::-1]
+            BlockHeight = lastBlock[0]["Height"] + 1
+            prevBlockHash = lastBlock[0]['BlockHeader']['blockHash']
+            self.addBlock(BlockHeight, prevBlockHash)
+            i += 1
+
+if __name__ == "__main__":
     blockchain = Blockchain()
-   
+    num_blocks = int(input("Enter the number of blocks to be mined: "))
+    blockchain.main(num_blocks)
+
+
